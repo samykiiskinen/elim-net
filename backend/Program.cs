@@ -1,4 +1,8 @@
 
+using backend.Data;
+using backend.Middleware;
+using Microsoft.EntityFrameworkCore;
+
 namespace backend
 {
     public class Program
@@ -7,8 +11,11 @@ namespace backend
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            // Configure PostgreSQL database connection
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+            // Add services to the container
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -16,7 +23,9 @@ namespace backend
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+
+            // Configure the HTTP request pipeline
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -24,10 +33,7 @@ namespace backend
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
 
             app.Run();
