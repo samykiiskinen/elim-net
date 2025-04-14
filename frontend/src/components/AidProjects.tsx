@@ -4,7 +4,9 @@ const AidProjects = () => {
   return (
     <>
       <Container>
-        <h1>BISTÅND</h1>
+        <Typography>
+          <h1>BISTÅND</h1>
+        </Typography>
       </Container>
     </>
   );

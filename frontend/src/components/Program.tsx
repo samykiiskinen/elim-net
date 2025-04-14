@@ -4,7 +4,9 @@ const Program = () => {
   return (
     <>
       <Container>
-        <h1>PROGRAM</h1>
+        <Typography>
+          <h1>PROGRAM</h1>
+        </Typography>
       </Container>
     </>
   );

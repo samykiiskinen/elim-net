@@ -4,7 +4,9 @@ const Songs = () => {
   return (
     <>
       <Container>
-        <h1>SÅNGER</h1>
+        <Typography>
+          <h1>SÅNGER</h1>
+        </Typography>
       </Container>
     </>
   );
