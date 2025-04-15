@@ -7,11 +7,11 @@ namespace backend.Models
         [Key]
         public int Id { get; set; }
 
-        public int? Verification { get; set; }
+        public string? Verification { get; set; }
 
         public string? Date { get; set; }
 
-        public int? AccountNo { get; set; }
+        public string? AccountNo { get; set; }
 
         public string? AccountName { get; set; }
 
@@ -23,11 +23,9 @@ namespace backend.Models
 
         public string? Decision { get; set; }
 
-        public string? Description { get; set; }
+        public string? Income { get; set; }
 
-        public decimal? Income { get; set; }
-
-        public decimal? Payment { get; set; }
+        public string? Payment { get; set; }
 
         public virtual ICollection<AidProjectAttachment> AidProjectAttachments { get; set; } = new List<AidProjectAttachment>();
 
