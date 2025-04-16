@@ -21,7 +21,7 @@ namespace backend.Controllers
         public async Task<ActionResult<IEnumerable<AidProject>>> GetAidProjects()
         {
             var projects = await _service.GetAllAidProjectsAsync();
-            return Ok(projects); // Return a 200 response with the projects
+            return Ok(projects);
         }
 
         [HttpGet("{id}")]

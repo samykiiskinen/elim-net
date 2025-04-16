@@ -11,8 +11,8 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250415064930_fix-model-types")]
-    partial class fixmodeltypes
+    [Migration("20250415182936_AddSongPatchDtoModel")]
+    partial class AddSongPatchDtoModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,8 +35,8 @@ namespace backend.Migrations
                     b.Property<string>("AccountName")
                         .HasColumnType("text");
 
-                    b.Property<int?>("AccountNo")
-                        .HasColumnType("integer");
+                    b.Property<string>("AccountNo")
+                        .HasColumnType("text");
 
                     b.Property<string>("Country")
                         .HasColumnType("text");
@@ -47,14 +47,11 @@ namespace backend.Migrations
                     b.Property<string>("Decision")
                         .HasColumnType("text");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Income")
                         .HasColumnType("text");
 
-                    b.Property<decimal?>("Income")
-                        .HasColumnType("numeric");
-
-                    b.Property<decimal?>("Payment")
-                        .HasColumnType("numeric");
+                    b.Property<string>("Payment")
+                        .HasColumnType("text");
 
                     b.Property<string>("Purpose")
                         .HasColumnType("text");
@@ -62,8 +59,8 @@ namespace backend.Migrations
                     b.Property<string>("Receiver")
                         .HasColumnType("text");
 
-                    b.Property<int?>("Verification")
-                        .HasColumnType("integer");
+                    b.Property<string>("Verification")
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -96,11 +93,10 @@ namespace backend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AidProjectId")
+                    b.Property<int?>("AidProjectId")
                         .HasColumnType("integer");
 
                     b.Property<string>("FilePath")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("FileType")
@@ -109,6 +105,31 @@ namespace backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Attachments");
+                });
+
+            modelBuilder.Entity("backend.Models.Song", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("SongKey")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SongText")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SongTitle")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Songs");
                 });
 
             modelBuilder.Entity("backend.Models.AidProjectAttachment", b =>

@@ -17,17 +17,16 @@ namespace backend.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Verification = table.Column<int>(type: "integer", nullable: true),
+                    Verification = table.Column<string>(type: "text", nullable: true),
                     Date = table.Column<string>(type: "text", nullable: true),
-                    AccountNo = table.Column<int>(type: "integer", nullable: true),
+                    AccountNo = table.Column<string>(type: "text", nullable: true),
                     AccountName = table.Column<string>(type: "text", nullable: true),
                     Country = table.Column<string>(type: "text", nullable: true),
                     Receiver = table.Column<string>(type: "text", nullable: true),
                     Purpose = table.Column<string>(type: "text", nullable: true),
                     Decision = table.Column<string>(type: "text", nullable: true),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    Income = table.Column<decimal>(type: "numeric", nullable: true),
-                    Payment = table.Column<decimal>(type: "numeric", nullable: true)
+                    Income = table.Column<string>(type: "text", nullable: true),
+                    Payment = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -40,13 +39,28 @@ namespace backend.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    FilePath = table.Column<string>(type: "text", nullable: false),
+                    FilePath = table.Column<string>(type: "text", nullable: true),
                     FileType = table.Column<string>(type: "text", nullable: true),
-                    AidProjectId = table.Column<int>(type: "integer", nullable: false)
+                    AidProjectId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Attachments", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Songs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    SongTitle = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    SongText = table.Column<string>(type: "text", nullable: false),
+                    SongKey = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Songs", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -85,6 +99,9 @@ namespace backend.Migrations
         {
             migrationBuilder.DropTable(
                 name: "AidProjectAttachments");
+
+            migrationBuilder.DropTable(
+                name: "Songs");
 
             migrationBuilder.DropTable(
                 name: "AidProjects");

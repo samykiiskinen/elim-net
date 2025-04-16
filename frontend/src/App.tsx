@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import Program from "./components/Program";
 import AidProjects from "./components/AidProjects";
-import Songs from "./components/Songs";
+import Songs from "./components/Songs/Songs";
 
 function App() {
   return (

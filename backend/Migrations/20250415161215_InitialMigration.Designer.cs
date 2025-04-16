@@ -11,8 +11,8 @@ using backend.Data;
 namespace backend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250415071742_fix-model-types-second-try")]
-    partial class fixmodeltypessecondtry
+    [Migration("20250415161215_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -93,11 +93,10 @@ namespace backend.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AidProjectId")
+                    b.Property<int?>("AidProjectId")
                         .HasColumnType("integer");
 
                     b.Property<string>("FilePath")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("FileType")
@@ -106,6 +105,31 @@ namespace backend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Attachments");
+                });
+
+            modelBuilder.Entity("backend.Models.Song", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("SongKey")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SongText")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SongTitle")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Songs");
                 });
 
             modelBuilder.Entity("backend.Models.AidProjectAttachment", b =>

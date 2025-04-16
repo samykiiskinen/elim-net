@@ -13,6 +13,6 @@ namespace backend.Models
 
         public int? AidProjectId { get; set; }
 
-        public virtual ICollection<AidProjectAttachment>? AidProjectAttachments { get; set; } = new List<AidProjectAttachment>();
+        public virtual ICollection<AidProjectAttachment> AidProjectAttachments { get; set; } = new List<AidProjectAttachment>();
     }
 }
