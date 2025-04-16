@@ -104,6 +104,31 @@ namespace backend.Migrations
                     b.ToTable("Attachments");
                 });
 
+            modelBuilder.Entity("backend.Models.Song", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("SongKey")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SongText")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SongTitle")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Songs");
+                });
+
             modelBuilder.Entity("backend.Models.AidProjectAttachment", b =>
                 {
                     b.HasOne("backend.Models.AidProject", "AidProject")
