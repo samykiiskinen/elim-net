@@ -7,6 +7,7 @@ import {
   DialogContent,
 } from "@mui/material";
 import SongForm from "./SongForm";
+import AddTwoToneIcon from "@mui/icons-material/AddTwoTone";
 
 const AddSongButton = () => {
   const [open, setOpen] = useState<boolean>(false);
@@ -21,13 +22,10 @@ const AddSongButton = () => {
 
   return (
     <>
-      <Button variant="contained" color="primary" onClick={handleClickOpen}>
-        LÄGG TILL
+      <Button variant="contained" color="success" onClick={handleClickOpen}>
+        <AddTwoToneIcon />
       </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogContent>
-          <SongForm onClose={handleClose} />
-        </DialogContent>
         <DialogActions>
           <Box
             sx={{
@@ -36,14 +34,22 @@ const AddSongButton = () => {
               alignItems: "flex-start",
               width: "100%",
               marginLeft: "1rem",
-              marginBottom: "1rem",
+              marginTop: "0.5rem",
             }}
           >
-            <Button onClick={handleClose} color="secondary" variant="contained">
-              ÅNGRA
+            <Button
+              onClick={handleClose}
+              color="secondary"
+              variant="contained"
+              sx={{ fontSize: "large" }}
+            >
+              {"<<"}
             </Button>
           </Box>
         </DialogActions>
+        <DialogContent>
+          <SongForm onClose={handleClose} />
+        </DialogContent>
       </Dialog>
     </>
   );
