@@ -10,12 +10,9 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { SongKey } from "../../models";
+import { FormProps } from "../../types/interfaces";
 
-interface SongFormProps {
-  onClose: () => void;
-}
-
-const SongForm: React.FC<SongFormProps> = ({ onClose }) => {
+const SongForm: React.FC<FormProps> = ({ onClose }) => {
   const [songTitle, setSongTitle] = useState<string>("");
   const [songText, setSongText] = useState<string>("");
   const [songKey, setSongKey] = useState<SongKey>(SongKey.C);
@@ -92,7 +89,12 @@ const SongForm: React.FC<SongFormProps> = ({ onClose }) => {
               ))}
           </Select>
         </FormControl>
-        <Button variant="contained" color="primary" type="submit">
+        <Button
+          variant="contained"
+          color="primary"
+          type="submit"
+          sx={{ fontSize: "medium", marginTop: "0.5rem" }}
+        >
           LÄGG TILL
         </Button>
       </form>

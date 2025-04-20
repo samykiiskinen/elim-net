@@ -19,6 +19,7 @@ import AddSongButton from "./AddSongButton";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { SongKey } from "../../models";
+import { Song } from "../../types/interfaces";
 
 const songKeyMap: { [key: number]: string } = {
   [SongKey.C]: "C",
@@ -34,13 +35,6 @@ const songKeyMap: { [key: number]: string } = {
   [SongKey.ASharp]: "A#",
   [SongKey.B]: "B",
 };
-
-interface Song {
-  id: number;
-  songTitle: string;
-  songText: string;
-  songKey: number;
-}
 
 const Songs = () => {
   const [songs, setSongs] = useState<Song[]>([]);
