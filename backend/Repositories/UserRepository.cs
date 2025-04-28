@@ -1,13 +1,14 @@
-﻿using backend.Repositories.Interfaces;
+﻿using backend.Models;
+using backend.Repositories.Interfaces;
 using Microsoft.AspNetCore.Identity;
 
 namespace backend.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public UserRepository(UserManager<IdentityUser> userManager)
+        public UserRepository(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
         }
@@ -18,7 +19,7 @@ namespace backend.Repositories
             return user;
         }
 
-        public async Task<IdentityResult> CreateUserAsync(IdentityUser user, string password)
+        public async Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password)
         {
             return await _userManager.CreateAsync(user, password);
         }

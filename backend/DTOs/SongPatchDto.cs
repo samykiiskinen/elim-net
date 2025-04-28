@@ -1,4 +1,6 @@
-﻿namespace backend.Models
+﻿using backend.Models;
+
+namespace backend.DTOs
 {
     public class SongPatchDto
     {

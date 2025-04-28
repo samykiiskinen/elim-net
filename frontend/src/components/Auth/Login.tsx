@@ -12,14 +12,14 @@ const Login = () => {
     event.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:44343/api/auth/login",
+        "http://localhost:44343/api/Users/login",
         {
           email,
           password,
         }
       );
-      const { token } = response.data;
-      login(token);
+      const { accessToken, roles } = response.data;
+      login(accessToken, email, roles);
     } catch (error) {
       console.error("Login failed:", error);
     }

@@ -1,39 +1,68 @@
 import React, { useState } from "react";
-import { TextField, Button, Typography, Grid, Box } from "@mui/material";
-import axios from "axios";
-import { User, UserClaim } from "../../types/interfaces";
+import {
+  TextField,
+  Button,
+  Box,
+  MenuItem,
+  Chip,
+  Container,
+} from "@mui/material";
+import { User } from "../../types/interfaces";
 import { FormProps } from "../../types/interfaces";
 import AddTwoToneIcon from "@mui/icons-material/AddTwoTone";
+import api from "../../services/api";
 
-const UserForm: React.FC<FormProps> = ({ onClose }) => {
+type DisplayUserRole = "Admin" | "Bistånd" | "Ekonomi" | "Lovsång";
+
+const UserForm: React.FC<FormProps> = ({ onClose, onUserAdded }) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [claims, setClaims] = useState<UserClaim[]>([{ value: "" }]);
+  const [selectedRole, setSelectedRole] = useState<DisplayUserRole | "">("");
+  const [roles, setRoles] = useState<DisplayUserRole[]>([]);
+  const availableRoles = ["Admin", "Bistånd", "Ekonomi", "Lovsång"];
 
-  const handleClaimChange = (index: number, value: string) => {
-    const newClaims = [...claims];
-    newClaims[index].value = value;
-    setClaims(newClaims);
+  const roleMapping: Record<DisplayUserRole, string> = {
+    Admin: "Admin",
+    Bistånd: "AidProjects",
+    Ekonomi: "Finance",
+    Lovsång: "Music",
   };
 
-  const addClaim = () => {
-    setClaims([...claims, { value: "" }]);
+  const handleRoleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setSelectedRole(event.target.value as DisplayUserRole);
+  };
+
+  const addRole = () => {
+    if (selectedRole && !roles.includes(selectedRole)) {
+      setRoles([...roles, selectedRole as DisplayUserRole]);
+      setSelectedRole("");
+    }
+  };
+
+  const removeRole = (roleToRemove: string) => {
+    setRoles(roles.filter((role) => role !== roleToRemove));
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    if (!email || !password) {
+      console.log("Email and password required");
+      return;
+    }
+    const registeredRoles = roles.map((role) => roleMapping[role]);
     const userData: User = {
       email,
       password,
-      claims,
+      roles: registeredRoles.filter(Boolean),
     };
 
     try {
-      const response = await axios.post(
-        "https://localhost:44343/api/Auth/register",
-        userData
-      );
+      const response = await api.post("Users/register", userData);
       console.log(response.data);
+      onUserAdded();
+      setEmail("");
+      setPassword("");
+      setRoles([]);
       onClose();
     } catch (error) {
       console.error("Registration failed:", error);
@@ -62,35 +91,56 @@ const UserForm: React.FC<FormProps> = ({ onClose }) => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-
-        <Typography variant="h6" gutterBottom>
-          ACCESS
-        </Typography>
-        {claims.map((claim, index) => (
-          <Grid container spacing={2} key={index} marginBottom={2}>
-            <Grid>
-              <TextField
-                label="Behörighet"
-                variant="outlined"
-                fullWidth
-                value={claim.value}
-                onChange={(e) => handleClaimChange(index, e.target.value)}
-                required
-              />
-            </Grid>
-            <Grid container alignItems="center" justifyContent="center">
-              <Button onClick={addClaim} variant="contained" color="success">
-                <AddTwoToneIcon />
-              </Button>
-            </Grid>
-          </Grid>
-        ))}
-
+        <Container
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "left",
+            gap: 2,
+          }}
+        >
+          <Box sx={{ display: "flex", width: "80%" }}>
+            <TextField
+              select
+              label="Roll"
+              value={selectedRole}
+              variant="outlined"
+              onChange={handleRoleChange}
+              sx={{ width: "100%" }}
+            >
+              {availableRoles.map((role) => (
+                <MenuItem key={role} value={role}>
+                  {role}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Box>
+          <Box>
+            <Button
+              variant="contained"
+              color="success"
+              onClick={addRole}
+              sx={{ marginRight: 1 }}
+            >
+              <AddTwoToneIcon />
+            </Button>
+          </Box>
+        </Container>
+        <Box>
+          {roles.map((role) => (
+            <Chip
+              key={role}
+              label={role}
+              onDelete={() => removeRole(role)}
+              sx={{ marginRight: 1, marginTop: 1, fontSize: "0.9rem" }}
+            />
+          ))}
+        </Box>
         <Button
           type="submit"
           variant="contained"
           color="primary"
-          sx={{ fontSize: "medium", marginTop: "0.5rem" }}
+          sx={{ marginTop: 2, fontSize: "1rem", fontWeight: 800 }}
         >
           LÄGG TILL
         </Button>

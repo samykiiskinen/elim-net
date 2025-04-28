@@ -9,7 +9,9 @@ import {
 import UserForm from "./UserForm";
 import AddTwoToneIcon from "@mui/icons-material/AddTwoTone";
 
-const AddUserButton = () => {
+const AddUserButton: React.FC<{ onUserAdded: () => void }> = ({
+  onUserAdded,
+}) => {
   const [open, setOpen] = useState<boolean>(false);
 
   const handleClickOpen = () => {
@@ -48,7 +50,7 @@ const AddUserButton = () => {
           </Box>
         </DialogActions>
         <DialogContent>
-          <UserForm onClose={handleClose} />
+          <UserForm onClose={handleClose} onUserAdded={onUserAdded} />
         </DialogContent>
       </Dialog>
     </>

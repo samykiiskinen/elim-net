@@ -1,5 +1,6 @@
 ﻿using backend.Models;
 using backend.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ namespace backend.Controllers
             _service = service;
         }
 
+        [Authorize(Roles = "Admin, SuperUser, AidProjects")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AidProject>>> GetAidProjects()
         {
@@ -24,6 +26,7 @@ namespace backend.Controllers
             return Ok(projects);
         }
 
+        [Authorize(Roles = "Admin, SuperUser, AidProjects")]
         [HttpGet("{id}")]
         public async Task<ActionResult<AidProject>> GetAidProject(int id)
         {
@@ -37,6 +40,7 @@ namespace backend.Controllers
             return Ok(aidProject);
         }
 
+        [Authorize(Roles = "Admin, SuperUser, AidProjects")]
         [HttpPost]
         public async Task<ActionResult<AidProject>> PostAidProject(AidProject aidProject)
         {
