@@ -1,12 +1,8 @@
 
-export interface UserClaim {
-    value: string;
-  }
-  
   export interface User {
     email: string;
-    password: string;
-    claims: UserClaim[];
+    password?: string;
+    roles: string[];
   }
 
   export interface Song {
@@ -18,14 +14,31 @@ export interface UserClaim {
 
   export interface FormProps {
     onClose: () => void;
+    onUserAdded: () => void;
   }
 
   export interface AuthContextType {
       isAuthenticated: boolean;
-      login: (token: string) => void;
+      login: (token: string, email: string, roles: string[]) => void;
       logout: () => void;
+      userEmail: string | null;
+      userRoles: string[];
+      handleRefreshToken: () => Promise<string | null>;      
   }
 
   export interface PrivateRouteProps {
     children: React.ReactNode;
+  }
+
+  export interface UserDetailsDialogProps {
+    open: boolean;
+    onClose: () => void;
+    user: User | null;
+    slotProps?: any;
+  }
+
+  export interface ProtectedRouteProps {
+    roles: string[];
+    children: React.ReactNode;
+    onLoginPrompt: () => void;
   }

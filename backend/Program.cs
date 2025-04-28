@@ -10,12 +10,15 @@ using backend.Services.Interfaces;
 using backend.Services;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
+using backend.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace backend
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -39,9 +42,20 @@ namespace backend
 
             // Add services to the container
             builder.Services.AddControllers();
-            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<AppDbContext>()
                 .AddDefaultTokenProviders();
+
+
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
+                options.AddPolicy("RequireSuperUserRole", policy => policy.RequireRole("SuperUser"));
+                options.AddPolicy("RequireFinanceUserRole", policy => policy.RequireRole("FinanceUser"));
+                options.AddPolicy("RequireAidProjectUserRole", policy => policy.RequireRole("AidProjectUser"));
+                options.AddPolicy("RequireMusicUserRole", policy => policy.RequireRole("MusicUser"));
+            });
+
             builder.Services.AddHealthChecks();
 
             // JWT Authentication configuration
@@ -98,6 +112,12 @@ namespace backend
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                await SeedRoles(services);
+            }
+
             // Configure the HTTP request pipeline
             if (app.Environment.IsDevelopment())
             {
@@ -112,6 +132,20 @@ namespace backend
             app.MapHealthChecks("/health");
             app.MapControllers();
             app.Run();
+        }
+
+        private static async Task SeedRoles(IServiceProvider serviceProvider)
+        {
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            string[] roleNames = { "Admin", "Finance", "AidProjects", "Music" };
+
+            foreach (var roleName in roleNames)
+            {
+                if (!await roleManager.RoleExistsAsync(roleName))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
         }
     }
 }

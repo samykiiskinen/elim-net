@@ -6,37 +6,73 @@ import Program from "./components/Program";
 import AidProjects from "./components/AidProjects";
 import Songs from "./components/Songs/Songs";
 import Users from "./components/Users/Users";
-import Login from "./components/Auth/Login";
 import { AuthProvider } from "./components/Auth/AuthContext";
-import PrivateRoute from "./components/Auth/PrivateRoute";
+import ProtectedRoute from "./components/Auth/ProtectedRoute";
+import { useState } from "react";
+import LoginDialog from "./components/Auth/LoginDialog";
 
 function App() {
+  const [openLoginDialog, setOpenLoginDialog] = useState(false);
+
+  const handleLoginPrompt = () => {
+    setOpenLoginDialog(true);
+  };
+
+  const closeLoginDialog = () => {
+    setOpenLoginDialog(false);
+  };
+
   return (
     <>
       <AuthProvider>
         <Router>
           <Navbar />
           <Routes>
-            <Route path="/" element={<Home />}></Route>
-            <Route path="/Program" element={<Program />}></Route>
-            <Route path="/Users" element={<Users />}></Route>
+            <Route path="/" element={<Home />} />
+            <Route path="/Program" element={<Program />} />
+            <Route
+              path="/Login"
+              element={
+                <LoginDialog
+                  open={openLoginDialog}
+                  onClose={closeLoginDialog}
+                />
+              }
+            />
+
             <Route
               path="/AidProjects"
               element={
-                <PrivateRoute>
+                <ProtectedRoute
+                  roles={["Admin", "AidProjects"]}
+                  onLoginPrompt={handleLoginPrompt}
+                >
                   <AidProjects />
-                </PrivateRoute>
+                </ProtectedRoute>
               }
             />
             <Route
               path="/Songs"
               element={
-                <PrivateRoute>
+                <ProtectedRoute
+                  roles={["Admin", "Music"]}
+                  onLoginPrompt={handleLoginPrompt}
+                >
                   <Songs />
-                </PrivateRoute>
+                </ProtectedRoute>
               }
             />
-            <Route path="/Login" element={<Login />}></Route>
+            <Route
+              path="/Users"
+              element={
+                <ProtectedRoute
+                  roles={["Admin"]}
+                  onLoginPrompt={handleLoginPrompt}
+                >
+                  <Users />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </Router>
       </AuthProvider>

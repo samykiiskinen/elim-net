@@ -46,9 +46,20 @@ const Songs = () => {
 
   useEffect(() => {
     const fetchSongs = async () => {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        console.error("No access token found.");
+        return;
+      }
       try {
         const response = await axios.get<Song[]>(
-          "https://localhost:44343/api/Songs"
+          "https://localhost:44343/api/Songs",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
         );
         const sortedSongs = response.data.sort((a, b) =>
           a.songTitle.toLowerCase().localeCompare(b.songTitle.toLowerCase())

@@ -9,11 +9,13 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useAuth } from "./AuthContext";
+import { jwtDecode } from "jwt-decode";
 
-const LoginDialog: React.FC<{ open: boolean; onClose: () => void }> = ({
-  open,
-  onClose,
-}) => {
+const LoginDialog: React.FC<{
+  open: boolean;
+  onClose: () => void;
+  slotProps?: any;
+}> = ({ open, onClose, slotProps }) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const { login } = useAuth();
@@ -22,14 +24,28 @@ const LoginDialog: React.FC<{ open: boolean; onClose: () => void }> = ({
     event.preventDefault();
     try {
       const response = await axios.post(
-        "https://localhost:44343/api/Auth/login",
+        "https://localhost:44343/api/Users/login",
         {
           email,
           password,
         }
       );
-      const { token } = response.data;
-      login(token);
+      const { accessToken } = response.data;
+      if (typeof accessToken !== "string" || accessToken.trim() === "") {
+        console.error("Login returned invalid token:", accessToken);
+        return;
+      }
+      const decodedToken: any = jwtDecode(accessToken);
+      const roles = decodedToken[
+        "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+      ]
+        ? [
+            decodedToken[
+              "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+            ],
+          ]
+        : [];
+      await login(accessToken, email, roles);
       onClose();
     } catch (error) {
       console.error("Login failed:", error);
@@ -37,7 +53,7 @@ const LoginDialog: React.FC<{ open: boolean; onClose: () => void }> = ({
   };
 
   return (
-    <Dialog open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose} slotProps={slotProps}>
       <DialogContent>
         <Box component="form" onSubmit={handleSubmit}>
           <TextField
@@ -62,8 +78,20 @@ const LoginDialog: React.FC<{ open: boolean; onClose: () => void }> = ({
         </Box>
       </DialogContent>
       <DialogActions>
-        <Box sx={{ display: "flex", gap: 1, marginRight: 3, marginBottom: 2 }}>
-          <Button onClick={onClose} color="error" variant="contained">
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1,
+            marginRight: 3,
+            marginBottom: 2,
+          }}
+        >
+          <Button
+            onClick={onClose}
+            color="error"
+            variant="contained"
+            sx={{ fontSize: "1.2rem" }}
+          >
             {"<<"}
           </Button>
           <Button
@@ -71,6 +99,7 @@ const LoginDialog: React.FC<{ open: boolean; onClose: () => void }> = ({
             variant="contained"
             color="primary"
             onClick={handleSubmit}
+            sx={{ fontSize: "1rem" }}
           >
             LOGGA IN
           </Button>

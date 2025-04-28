@@ -7,6 +7,6 @@ namespace backend.Models
         public required string Email { get; set; }
         public required string Password { get; set; }
 
-        public List<string> Claims = new List<string>();
+        public List<string> Roles { get; set; } = new List<string>();
     }
 }
