@@ -99,7 +99,7 @@ const Users = () => {
             marginTop: 2,
             border: "1px solid #ccc",
             borderRadius: "4px",
-            width: "60%",
+            width: "50%",
             minWidth: "300px",
           }}
         >
@@ -111,7 +111,7 @@ const Users = () => {
                   sx={{
                     fontSize: "1.2rem",
                     fontWeight: "bold",
-                    width: "70%",
+                    width: "85%",
                     cursor: "pointer",
                   }}
                 >
@@ -121,11 +121,9 @@ const Users = () => {
                   sx={{
                     fontSize: "1.2rem",
                     fontWeight: "bold",
-                    width: "30%",
+                    width: "15%",
                   }}
-                >
-                  TA BORT
-                </TableCell>
+                ></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -150,6 +148,10 @@ const Users = () => {
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
+                        width: "2rem",
+                        height: "1.2rem",
+                        paddingY: 1.5,
+                        minWidth: "0",
                       }}
                     >
                       <CloseIcon />

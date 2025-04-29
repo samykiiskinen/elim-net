@@ -40,12 +40,24 @@ namespace backend.Controllers
             return Ok(aidProject);
         }
 
-        [Authorize(Roles = "Admin, SuperUser, AidProjects")]
+        [Authorize(Policy = "RequireAidProjectUserRole")]
         [HttpPost]
         public async Task<ActionResult<AidProject>> PostAidProject(AidProject aidProject)
         {
-            await _service.AddAidProjectAsync(aidProject);
-            return CreatedAtAction("GetAidProject", new { id = aidProject.Id }, aidProject);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _service.AddAidProjectAsync(aidProject);
+                return CreatedAtAction("GetAidProject", new { id = aidProject.Id }, aidProject);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 }
