@@ -50,10 +50,10 @@ namespace backend
             builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-                options.AddPolicy("RequireSuperUserRole", policy => policy.RequireRole("SuperUser"));
-                options.AddPolicy("RequireFinanceUserRole", policy => policy.RequireRole("FinanceUser"));
-                options.AddPolicy("RequireAidProjectUserRole", policy => policy.RequireRole("AidProjectUser"));
-                options.AddPolicy("RequireMusicUserRole", policy => policy.RequireRole("MusicUser"));
+                options.AddPolicy("RequireSuperUserRole", policy => policy.RequireRole("Admin", "SuperUser"));
+                options.AddPolicy("RequireFinanceUserRole", policy => policy.RequireRole("Admin", "FinanceUser"));
+                options.AddPolicy("RequireAidProjectUserRole", policy => policy.RequireRole("Admin", "AidProjectUser"));
+                options.AddPolicy("RequireMusicUserRole", policy => policy.RequireRole("Admin", "MusicUser"));
             });
 
             builder.Services.AddHealthChecks();

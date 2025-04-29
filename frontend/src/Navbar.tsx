@@ -54,6 +54,10 @@ const Navbar = () => {
     return "N/A";
   };
 
+  const getToken = () => {
+    return localStorage.getItem("accessToken");
+  };
+
   const getDialogPosition = () => {
     if (appBarRef.current) {
       const rect = appBarRef.current.getBoundingClientRect();
@@ -185,21 +189,32 @@ const Navbar = () => {
               }}
             >
               <DialogContent>
-                <Typography variant="h6">E-post:</Typography>
-                <Typography sx={{ marginBottom: 1 }}>{userEmail}</Typography>
-                <Divider sx={{ marginY: 1 }}></Divider>
-                <Typography variant="h6">Token giltig till:</Typography>
-                <Typography sx={{ marginBottom: 1 }}>
-                  {getTokenExpiryDate()}
+                <Typography variant="h5" sx={{ marginBottom: 1 }}>
+                  {userEmail}
                 </Typography>
                 <Divider sx={{ marginY: 1 }}></Divider>
-                <Typography variant="h6">Roller:</Typography>
-                {userRoles?.length > 0 ? (
-                  userRoles.map((role, index) => (
-                    <Typography key={index}>{role}</Typography>
-                  ))
-                ) : (
-                  <Typography>Inga tilldelade roller</Typography>
+                {isAuthenticated && (
+                  <Box>
+                    {userRoles?.length > 0 ? (
+                      userRoles.map((role, index) => (
+                        <Typography key={index}>{role}</Typography>
+                      ))
+                    ) : (
+                      <Typography>Inga tilldelade roller</Typography>
+                    )}
+                    <Divider sx={{ marginY: 1 }}></Divider>
+                    <Typography
+                      sx={{
+                        fontSize: "0.8rem",
+                        color: "azure",
+                        marginBottom: "1rem",
+                        wordBreak: "break-word",
+                      }}
+                    >
+                      {getToken() || "No token available"}
+                    </Typography>
+                    <Typography>{getTokenExpiryDate()}</Typography>
+                  </Box>
                 )}
               </DialogContent>
               <DialogActions>

@@ -10,9 +10,9 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { SongKey } from "../../models";
-import { FormProps } from "../../types/interfaces";
+import { SongFormProps } from "../../types/interfaces";
 
-const SongForm: React.FC<FormProps> = ({ onClose }) => {
+const SongForm: React.FC<SongFormProps> = ({ onClose }) => {
   const [songTitle, setSongTitle] = useState<string>("");
   const [songText, setSongText] = useState<string>("");
   const [songKey, setSongKey] = useState<SongKey>(SongKey.C);

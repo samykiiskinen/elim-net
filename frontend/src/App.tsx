@@ -3,7 +3,7 @@ import Navbar from "./Navbar";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import Program from "./components/Program";
-import AidProjects from "./components/AidProjects";
+import AidProjects from "./components/AidProjects/AidProjects";
 import Songs from "./components/Songs/Songs";
 import Users from "./components/Users/Users";
 import { AuthProvider } from "./components/Auth/AuthContext";
